@@ -1,11 +1,13 @@
 import { expect, test } from "bun:test";
+import { chromium } from "playwright";
 import getJLC from "../utils/jlc";
 
 test(
 	"getJLC fetches real component data",
 	async () => {
 		const partNumber = "C14663";
-		const result = await getJLC(partNumber);
+		const browser = await chromium.launch({ headless: false });
+		const result = await getJLC(browser, partNumber);
 		expect(result).toBeDefined();
 		expect(result?.jlcPartNumber).toBeDefined();
 		expect(result?.manufacturerPartNumber).toBeDefined();
@@ -21,7 +23,8 @@ test(
 test(
 	"getJLC handles invalid part numbers",
 	async () => {
-		const result = await getJLC("INVALID_PART_XYZ123789");
+		const browser = await chromium.launch({ headless: false });
+		const result = await getJLC(browser, "INVALID_PART_XYZ123789");
 		expect(result).toBeUndefined();
 	},
 	{ timeout: 12_000 },
@@ -33,8 +36,10 @@ test(
 		const partNumbers = ["C14663", "C86521"];
 		const manufacturerNumbers = ["CC0603KRX7R9BB104", "ADS1240E/1K"];
 
+		const browser = await chromium.launch({ headless: false });
+
 		for (const partNumber of partNumbers) {
-			const result = await getJLC(partNumber);
+			const result = await getJLC(browser, partNumber);
 			expect(result?.jlcPartNumber).toContain(partNumber);
 			expect(result?.manufacturerPartNumber).toBe(
 				manufacturerNumbers[partNumbers.indexOf(partNumber)],
