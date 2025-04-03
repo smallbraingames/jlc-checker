@@ -2,6 +2,8 @@
 
 A utility to match JLC PCB parts with your canonical bill of materials (BOM), helping you quickly identify part substitutions and inconsistencies.
 
+(README by Claude)
+
 ## 🚀 Features
 
 - Cross-references JLCPCB parts with your canonical BOM
